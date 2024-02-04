@@ -1,5 +1,6 @@
 package com.boardcamp.api.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,5 +46,16 @@ public class RentalsService {
         }
 
         return rentalsRepository.save(new RentalsModel(rental, game.get(),customer.get()));
+    }
+
+    public RentalsModel finishRental(long id) throws NotFoundException{
+        Optional<RentalsModel> rental = rentalsRepository.findById(id);
+
+        if(!rental.isPresent()){
+            throw new NotFoundException();
+        }
+        LocalDate now = LocalDate.now();
+
+        return rental.get();
     }
 }
