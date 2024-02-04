@@ -48,7 +48,7 @@ public class CustomersController {
             return ResponseEntity.status(HttpStatus.CREATED).body(customersServices.postCustomer(customer));
         } catch (DataIntegrityViolationException e) {
 
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("CPF is already in use!");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 
         }
     }
