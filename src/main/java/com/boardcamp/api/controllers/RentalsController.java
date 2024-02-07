@@ -58,9 +58,10 @@ public class RentalsController {
     }
     
     @PutMapping("/{id}/return")
-    public ResponseEntity<Object> finishRental(@PathVariable String id) {
+    public ResponseEntity<Object> finishRental(@PathVariable int id) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body();
+            return ResponseEntity.status(HttpStatus.OK).body(rentalsService.finishRental((long) id));
+            
         } catch (Exception e) {
             
             System.out.println(e.getClass());

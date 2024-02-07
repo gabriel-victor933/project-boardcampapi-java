@@ -48,14 +48,45 @@ public class RentalsService {
         return rentalsRepository.save(new RentalsModel(rental, game.get(),customer.get()));
     }
 
-    public RentalsModel finishRental(long id) throws NotFoundException{
+    public RentalsModel finishRental(long id) throws NotFoundException, UnprocessableEntityException{
         Optional<RentalsModel> rental = rentalsRepository.findById(id);
 
-        if(!rental.isPresent()){
-            throw new NotFoundException();
-        }
-        LocalDate now = LocalDate.now();
+        if(!rental.isPresent()) throw new NotFoundException();
 
-        return rental.get();
+        if(rental.get().getReturnDate() != null) throw new UnprocessableEntityException("Rental have been finished!");
+       
+        LocalDate returnDate = LocalDate.now();
+        int delayFee = calculteDelayfee(returnDate,rental.get().getRentDate(),rental.get().getDaysRented(),rental.get().getGame().getPricePerDay());
+
+        RentalsModel updatedRental = rental.get();
+        updatedRental.setReturnDate(returnDate);
+        updatedRental.setDelayFee(delayFee);
+        
+        return rentalsRepository.save(updatedRental);
+    }
+
+    private int calculteDelayfee(LocalDate returnDate,LocalDate rentDate,int daysRented,int pricePerDay){
+
+        int returnDateYear = returnDate.getYear();
+        int rentDateYear = rentDate.getYear();
+
+        if(returnDateYear == rentDateYear){
+            
+            if(daysRented < (returnDate.getDayOfYear() - rentDate.getDayOfYear())){
+                return (returnDate.getDayOfYear() - rentDate.getDayOfYear() - daysRented)*pricePerDay;
+            }
+
+            return 0;
+        } 
+
+        int daysPast = 0;
+
+        if (returnDateYear - rentDateYear > 1) {
+            daysPast += (returnDateYear - rentDateYear - 1) * 365;
+        }
+
+        daysPast += returnDate.getDayOfYear() + (rentDate.lengthOfYear() - rentDate.getDayOfYear());
+
+        return (daysPast - daysRented)*pricePerDay;
     }
 }

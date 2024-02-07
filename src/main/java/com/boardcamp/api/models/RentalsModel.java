@@ -36,7 +36,7 @@ public class RentalsModel {
     @Column(nullable = false)
     private int daysRented;
     @Column(nullable = true)
-    private String returnDate = null;
+    private LocalDate returnDate = null;
     @Column(nullable = false)
     private int originalPrice;
     @Column(nullable = false)
