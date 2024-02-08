@@ -1,5 +1,7 @@
 package com.boardcamp.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -7,7 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ApiApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void firstTest() {
+		assertEquals(1,2);
 	}
 
 }

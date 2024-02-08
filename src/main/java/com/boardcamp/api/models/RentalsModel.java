@@ -1,6 +1,7 @@
 package com.boardcamp.api.models;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import com.boardcamp.api.dtos.RentalsDto;
 
@@ -49,4 +50,5 @@ public class RentalsModel {
         this.originalPrice = game.getPricePerDay()*rental.getDaysRented();
         this.rentDate = LocalDate.now();
     }
+
 }
