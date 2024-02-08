@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.boardcamp.api.dtos.RentalsDto;
+import com.boardcamp.api.errors.NotFoundEntityException;
 import com.boardcamp.api.errors.UnprocessableEntityException;
 import com.boardcamp.api.services.RentalsService;
 
@@ -35,37 +36,17 @@ public class RentalsController {
     }
 
     @PostMapping()
-    public ResponseEntity<Object> postRental(@RequestBody @Valid RentalsDto rental) {
+    public ResponseEntity<Object> postRental(@RequestBody @Valid RentalsDto rental) throws  UnprocessableEntityException, NotFoundEntityException {
         
-        try {
 
-            return ResponseEntity.status(HttpStatus.OK).body(rentalsService.postRental(rental));
-
-        } catch(UnprocessableEntityException e){
-
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
-
-        } catch (NotFoundException e) {
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-
-        } catch (Exception e) {
-            System.out.println(e.getClass());
-            System.out.println(e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(rentalsService.postRental(rental));
+        
         
     }
     
     @PutMapping("/{id}/return")
-    public ResponseEntity<Object> finishRental(@PathVariable int id) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(rentalsService.finishRental((long) id));
-            
-        } catch (Exception e) {
-            
-            System.out.println(e.getClass());
-            return ResponseEntity.status(500).body(null);
-        }
+    public ResponseEntity<Object> finishRental(@PathVariable int id) throws  UnprocessableEntityException, NotFoundEntityException {
+        return ResponseEntity.status(HttpStatus.OK).body(rentalsService.finishRental((long) id));
+
     }
 }

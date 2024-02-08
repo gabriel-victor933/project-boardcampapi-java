@@ -9,6 +9,7 @@ import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.boardcamp.api.dtos.RentalsDto;
+import com.boardcamp.api.errors.NotFoundEntityException;
 import com.boardcamp.api.errors.UnprocessableEntityException;
 import com.boardcamp.api.models.CustomersModel;
 import com.boardcamp.api.models.GamesModel;
@@ -31,12 +32,16 @@ public class RentalsService {
         return rentalsRepository.findAll();
     }
 
-    public RentalsModel postRental(RentalsDto rental) throws NotFoundException,UnprocessableEntityException {
+    public RentalsModel postRental(RentalsDto rental) throws UnprocessableEntityException, NotFoundEntityException {
         Optional<CustomersModel> customer = customersRepository.findById(rental.getCustomerId());
         Optional<GamesModel> game = gamesRepository.findById(rental.getGameId());
 
-        if(!customer.isPresent() || !game.isPresent()) {
-            throw new NotFoundException();
+        if(!customer.isPresent()) {
+            throw new NotFoundEntityException("Customer Not Found!");
+        }
+        
+        if(!game.isPresent()) {
+            throw new NotFoundEntityException("Customer Not Found!");
         }
 
         int count = rentalsRepository.countRentalsByGameId(game.get().getId());
@@ -48,10 +53,10 @@ public class RentalsService {
         return rentalsRepository.save(new RentalsModel(rental, game.get(),customer.get()));
     }
 
-    public RentalsModel finishRental(long id) throws NotFoundException, UnprocessableEntityException{
+    public RentalsModel finishRental(long id) throws  UnprocessableEntityException, NotFoundEntityException{
         Optional<RentalsModel> rental = rentalsRepository.findById(id);
 
-        if(!rental.isPresent()) throw new NotFoundException();
+        if(!rental.isPresent()) throw new NotFoundEntityException("Rental Not Found!");
 
         if(rental.get().getReturnDate() != null) throw new UnprocessableEntityException("Rental have been finished!");
        

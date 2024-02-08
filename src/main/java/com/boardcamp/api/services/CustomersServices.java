@@ -7,6 +7,7 @@ import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.boardcamp.api.dtos.CustomersDto;
+import com.boardcamp.api.errors.NotFoundEntityException;
 import com.boardcamp.api.models.CustomersModel;
 import com.boardcamp.api.repositories.CustomersRepository;
 
@@ -16,11 +17,11 @@ public class CustomersServices {
     @Autowired
     private CustomersRepository customersRepository;
 
-    public CustomersModel getCustomerById(Long id) throws NotFoundException{
+    public CustomersModel getCustomerById(Long id) throws NotFoundEntityException{
         Optional<CustomersModel> customer = customersRepository.findById((Long) id);
 
         if(!customer.isPresent()){
-            throw new NotFoundException();
+            throw new NotFoundEntityException("Customer Not Found!");
         }
         return customer.get();
     }
