@@ -36,16 +36,8 @@ public class GamesController {
     @PostMapping()
     public ResponseEntity<Object> PostGame(@RequestBody @Valid GamesDto game) {
 
-        try {
-            GamesModel gameCreated = gamesRepository.save(new GamesModel(game));
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(gameCreated);
-        } catch (DataIntegrityViolationException e) {
-            
-            System.out.println(e.getClass());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Name is already in use!");
-        }
-
-
+        GamesModel gameCreated = gamesRepository.save(new GamesModel(game));
+        return ResponseEntity.status(HttpStatus.CREATED).body(gameCreated);
     }
-    
+
 }

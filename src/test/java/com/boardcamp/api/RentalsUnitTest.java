@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -39,7 +38,7 @@ public class RentalsUnitTest {
     private GamesRepository gamesRepository;
 
     @Test
-    void givenNotExistingRentalWhenFindingRecipeThenThrowsError(){
+    void givenNotExistingRentalWhenFindingRentalThenThrowsError(){
         //given 
         Long id = 1l;
 
@@ -52,7 +51,7 @@ public class RentalsUnitTest {
     }
 
     @Test
-    void givenRentalIdWhenValidateReturnDateThrowsError(){
+    void givenRentalIdWhenValidateNotNullReturnDateThrowsError(){
         Long id = 1l;
         GamesModel game = new GamesModel();
         CustomersModel customer = new CustomersModel();
